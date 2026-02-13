@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для любимого</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: radial-gradient(circle, #1a0a1a, #000000);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .envelope {
+            width: 300px;
+            height: 200px;
+            background: #ffb6c1; /* Розовый конверт */
+            position: relative;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.5s;
+        }
+
+        .envelope:hover {
+            transform: scale(1.05);
+        }
+
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #ff8da1;
+            z-index: 2;
+        }
+
+        .heart-seal {
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 40px;
+            color: #d63384;
+            z-index: 3;
+            text-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        /* Модальное окно (открытка) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 10;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            /* Использование розового фона с паттерном кроликов */
+            background-color: #ffc0cb;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 64 64"><path d="M40 24c0-4.4 3.6-8 8-8s8 3.6 8 8v8h-16v-8zm-24 0c0-4.4-3.6-8-8-8s-8 3.6-8 8v8h16v-8zm20 16c0 6.6-5.4 12-12 12s-12-5.4-12-12v-4h24v4z" fill="white" opacity="0.6"/></svg>');
+            width: 80%;
+            max-width: 500px;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(215, 105, 180, 0.5);
+            position: relative;
+            animation: openUp 0.8s ease-out;
+        }
+/* Рамка для фото */
+        .photo-frame {
+            width: 280px;
+            height: 210px;
+            margin: 0 auto 20px;
+            padding: 8px;
+            background: linear-gradient(45deg, #ff00ea, #ff0055, #ffcc00, #ff00ea);
+            background-size: 300% 300%;
+            animation: gradient-border 4s ease infinite;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        @keyframes gradient-border {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 6px;
+            display: block;
+        }
+        @keyframes openUp {
+            from { transform: scale(0) rotate(-10deg); opacity: 0; }
+            to { transform: scale(1) rotate(0); opacity: 1; }
+        }
+
+        .card h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3rem;
+            color: #d63384;
+            margin-bottom: 20px;
+        }
+
+        .card p {
+            font-size: 1.2rem;
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .close-btn {
+            background: #d63384;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            transition: 0.3s;
+        }
+
+        .close-btn:hover {
+            background: #ff1493;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="bgCanvas"></canvas>
+
+    <div class="container">
+        <div class="envelope" onclick="openCard()">
+            <div class="heart-seal">❤</div>
+        </div>
+    </div>
+
+    <div class="modal" id="cardModal">
+        <div class="card">
+            <canvas id="heartCanvas" style="position: absolute; top:0; left:0; pointer-events:none; border-radius:20px;"></canvas>
+            <h1>Моему любимому</h1>
+<canvas id="canvas"></canvas>
+
+    
+    <div id="cardModal">
+        <div class="modal-content">
+            <div class="photo-frame">
+                <!-- Вставьте путь к вашей фотографии здесь -->
+                <img src="photo.jpeg">
+            </div>
+            <p class="message">
+       
+            <p>Любимый, поздравляю тебя с днём всех влюблённых. <br>  Ты — самое прекрасное, что случилось в моей жизни. Я безумно рада, что провожу этот праздник с тобой. Каждое мгновение с тобой наполнено светом и радостью.<br> Люблю тебя очень сильно!<br> Ты моё всё.</p>
+            <button class="close-btn" onclick="closeCard()">Закрыть с любовью</button>
+        </div>
+    </div>
+
+    <script>
+        const bgCanvas = document.getElementById('bgCanvas');
+        const bgCtx = bgCanvas.getContext('2d');
+        const heartCanvas = document.getElementById('heartCanvas');
+        const hCtx = heartCanvas.getContext('2d');
+
+        let petals = [];
+        let hearts = [];
+
+        function resize() {
+            bgCanvas.width = window.innerWidth;
+            bgCanvas.height = window.innerHeight;
+            const card = document.querySelector('.card');
+            heartCanvas.width = card.offsetWidth;
+            heartCanvas.height = card.offsetHeight;
+        }
+
+        class Petal {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * bgCanvas.width;
+                this.y = -20;
+                this.size = Math.random() * 10 + 5;
+                this.speed = Math.random() * 2 + 1;
+                this.angle = Math.random() * Math.PI * 2;
+                this.spin = Math.random() * 0.05 - 0.025;
+            }
+            update() {
+                this.y += this.speed;
+                this.angle += this.spin;
+                this.x += Math.sin(this.angle) * 1;
+                if (this.y > bgCanvas.height) this.reset();
+            }
+            draw() {
+                bgCtx.save();
+                bgCtx.translate(this.x, this.y);
+                bgCtx.rotate(this.angle);
+                bgCtx.fillStyle = 'rgba(255, 182, 193, 0.7)';
+                bgCtx.beginPath();
+                bgCtx.ellipse(0, 0, this.size, this.size/2, 0, 0, Math.PI * 2);
+                bgCtx.fill();
+                bgCtx.restore();
+            }
+        }
+
+        class Heart {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * heartCanvas.width;
+                this.y = Math.random() * heartCanvas.height;
+                this.size = Math.random() * 15 + 10;
+                this.opacity = Math.random() * 0.5 + 0.2;
+                this.v = Math.random() * 0.5 + 0.2;
+            }
+            update() {
+                this.y -= this.v;
+                if (this.y < -20) this.y = heartCanvas.height + 20;
+            }
+            draw() {
+                hCtx.save();
+                hCtx.translate(this.x, this.y);
+                hCtx.beginPath();
+                hCtx.moveTo(0, 0);
+                let d = this.size;
+                hCtx.bezierCurveTo(-d/2, -d/2, -d, d/3, 0, d);
+                hCtx.bezierCurveTo(d, d/3, d/2, -d/2, 0, 0);
+                hCtx.fillStyle = `rgba(255, 20, 147, ${this.opacity})`;
+                hCtx.fill();
+                hCtx.restore();
+            }
+        }
+
+        function init() {
+            resize();
+            petals = Array.from({length: 50}, () => new Petal());
+            hearts = Array.from({length: 25}, () => new Heart());
+        }
+
+        function animate() {
+            bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+            petals.forEach(p => { p.update(); p.draw(); });
+
+            if (document.getElementById('cardModal').style.display === 'flex') {
+                hCtx.clearRect(0, 0, heartCanvas.width, heartCanvas.height);
+                hearts.forEach(h => { h.update(); h.draw(); });
+            }
+            requestAnimationFrame(animate);
+        }
+
+        function openCard() {
+            document.getElementById('cardModal').style.display = 'flex';
+            resize();
+            confetti({
+                particleCount: 80,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff6b6b', '#ffffff']
+            });
+        }
+
+        function closeCard() {
+            document.getElementById('cardModal').style.display = 'none';
+        }
+
+        window.addEventListener('resize', resize);
+        init();
+        animate();
+    </script>
+</body>
+</html>
